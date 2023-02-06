@@ -38,12 +38,13 @@ const getHome = async (req, res) => {
     let userSession = req.session.userEmail;
     let fname;
     const banners = await Banners.find();
+    console.log(1);
     if (userSession) {
       const userData = await User.findOne({ email: userSession });
       fname = userData.firstName;
       const cartData = await Carts.find({ userId: userData._id });
       const wishlistData = await Wishlist.find({ userId: userData._id });
-
+      console.log(2);
       if (cartData.length) {
         count = cartData[0].product.length;
       } else {
@@ -55,26 +56,29 @@ const getHome = async (req, res) => {
         wishCount = 0;
       }
     }
+    console.log(3);
     const category = await Category.find({});
     await product.find({}, (err, product) => {
     
       if (err) {
         console.log(err);
       } else {
+console.log(category,product,banners);
 
-        res.render("user/index", {
-          cat: category,
-          name: fname,
-          data:product,
-          sessionData: req.session.userEmail,
-          count,banners,
-          wishCount,
-        });
+        res.render("user/index",{sessionData: req.session.userEmail, cat: category,data:product,banners,})
+        //   cat: category,
+      
+        //   data:product,
+        //   sessionData: req.session.userEmail,
+        //  banners,
+          
+        // });
       }
     });
     
   } catch (error) {
-   res.render('user/error')
+  // res.redirect('/error')
+  console.log(error);
   }
 };
 const getLogin = (req, res) => {
